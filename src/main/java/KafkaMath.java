@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class KafkaMath implements Runnable{
 
-    private static ExecutorService executorService = new ThreadPoolExecutor(3, 5,
-                0L, TimeUnit.MILLISECONDS,
+    private static ExecutorService executorService = new ThreadPoolExecutor(5, 10,
+                3000, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     private static KafkaConsumer<String, String> consumer;
     private final static String TOPIC = "test";
