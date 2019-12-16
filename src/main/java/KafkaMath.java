@@ -11,17 +11,17 @@ import java.util.concurrent.TimeUnit;
 
 public class KafkaMath implements Runnable{
 
-    private static ExecutorService executorService = new ThreadPoolExecutor(6, 12,
+    private static ExecutorService executorService = new ThreadPoolExecutor(3, 5,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     private static KafkaConsumer<String, String> consumer;
-    private final static String TOPIC = "web";
+    private final static String TOPIC = "test";
     public KafkaMath(){
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         //每个消费者分配独立的组号
         props.put("group.id", "test2");
-        //如果value合法，则自动提交偏移量
+        //如果value合法，则自动提V交偏移量
         props.put("enable.auto.commit", "true");
         //设置多久一次更新被消费消息的偏移量
         props.put("auto.commit.interval.ms", "1000");
