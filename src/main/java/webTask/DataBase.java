@@ -1,16 +1,15 @@
-import org.matheclipse.core.reflection.system.D;
+package webTask;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class DataBase {
-    private static DataBase dataBase = new DataBase();
     private Connection con;
-    private DataBase(){
+    public DataBase(String database){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://192.168.1.9:3306/autosolve_test?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT" ;
+            String url = "jdbc:mysql://192.168.1.9:3306/"+database+"?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT";
             String username = "root" ;
             String password = "woaizxl" ;
             con = DriverManager.getConnection(url , username , password );
@@ -19,9 +18,9 @@ public class DataBase {
             e.printStackTrace();
         }
     }
-    public static  DataBase getInstance(){
-        return dataBase;
-    }
+//    public static  DataBase getInstance(){
+//        return dataBase;
+//    }
 
     public ResultSet query(String sql) throws Exception{
         return con.createStatement().executeQuery(sql);
@@ -31,8 +30,7 @@ public class DataBase {
         con.createStatement().execute(sql);
     }
 
-
-    public static void main(String[] args) {
-        DataBase dataBase = DataBase.getInstance();
-    }
+//    public static void main(String[] args) {
+//        DataBase dataBase = DataBase.getInstance();
+//    }
 }

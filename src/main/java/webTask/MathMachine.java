@@ -1,3 +1,5 @@
+package webTask;
+
 public class MathMachine {
     private static MathMachine instance = new MathMachine();
     private MathMachine(){

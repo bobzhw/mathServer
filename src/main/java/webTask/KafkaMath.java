@@ -1,19 +1,23 @@
+package webTask;
+
+import net.didion.jwnl.data.Exc;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class KafkaMath implements Runnable{
 
-    private static ExecutorService executorService = new ThreadPoolExecutor(5, 10,
-                3000, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>());
+//    private static ExecutorService executorService = new ThreadPoolExecutor(3, 5,
+//                3000, TimeUnit.MILLISECONDS,
+//                new LinkedBlockingQueue<Runnable>());
+    private static ExecutorService ex = Executors.newCachedThreadPool();
+    private final Semaphore semp = new Semaphore(4);
     private static KafkaConsumer<String, String> consumer;
     private final static String TOPIC = "test";
     public KafkaMath(){
@@ -38,11 +42,23 @@ public class KafkaMath implements Runnable{
     @Override
     public void run(){
         consumer.subscribe(Arrays.asList(TOPIC));
-        for(;;){
+        for(;;) {
             ConsumerRecords<String, String> records = consumer.poll(3000);
-            for (ConsumerRecord<String, String> record : records){
-                executorService.execute(new Task(record.value(),record.key()));
+            List<Task> tasks = new ArrayList<>();
+            for (ConsumerRecord<String, String> record : records) {
+//                executorService.execute(new Task(record.value(),record.key()));
+                ex.execute(new Task(record.value(),record.key()));
+//                new Task(record.value(),record.key()).run();
+//                tasks.add(new Task(record.value(), record.key()));
             }
+//            for (Task task : tasks) {
+//                try {
+//                    task.run();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+
+//                }
+//            }
         }
     }
 
